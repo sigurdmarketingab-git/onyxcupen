@@ -3,15 +3,8 @@ import PageHero from "@/components/PageHero";
 import { ChevronRight } from "lucide-react";
 import { getAllCupinfo } from "@/lib/sanity";
 
-// TEST: Temporär mock för att visa hur sidan ser ut med flera nivåer.
-// Ta bort mockNivåer och sammanfogningen nedan när riktiga nivåer finns i Sanity.
-const mockNivåer = [
-  { _id: "mock-bla", namnPaNivan: "Blå Nivå", slug: "bla-niva", farg: { hex: "#3b82f6" } },
-];
-
 export default async function CupinfoIndex() {
-  const sanityNivåer = await getAllCupinfo();
-  const nivåer = [...(sanityNivåer ?? []), ...mockNivåer];
+  const nivåer = await getAllCupinfo();
 
   return (
     <>
