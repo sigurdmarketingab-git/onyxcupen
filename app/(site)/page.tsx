@@ -315,7 +315,7 @@ export default async function HomePage() {
                       <p className="text-xs text-[#9ca3af] mb-2 font-medium">{datum}</p>
                       <h3 className="font-semibold text-white mb-2 leading-snug">{item.titel}</h3>
                       <p className="text-sm text-[#9ca3af] leading-relaxed line-clamp-2">
-                        {item.excerpt}
+                        {item.excerpt?.slice(0, 220)}
                       </p>
                     </div>
                   </Link>

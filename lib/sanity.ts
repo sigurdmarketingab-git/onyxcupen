@@ -4,8 +4,8 @@ import imageUrlBuilder from "@sanity/image-url";
 type SanityImageSource = any;
 
 export const client = createClient({
-  projectId: "ylp5n3um",
-  dataset: "production",
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
   apiVersion: "2025-05-25",
   useCdn: true,
 });
@@ -25,7 +25,7 @@ export async function getAllNyheter() {
   return client.fetch(
     `*[_type == "nyhet"] | order(publishedAt desc) {
       _id, titel, "slug": slug.current, publishedAt,
-      "excerpt": string::slice(pt::text(helaNyhetsbeskrivningen), 0, 220),
+      "excerpt": pt::text(helaNyhetsbeskrivningen),
       nyhetsbild
     }`
   );
@@ -35,7 +35,7 @@ export async function getLatestNyheter(count = 6) {
   return client.fetch(
     `*[_type == "nyhet"] | order(publishedAt desc)[0...$count] {
       _id, titel, "slug": slug.current, publishedAt,
-      "excerpt": string::slice(pt::text(helaNyhetsbeskrivningen), 0, 220),
+      "excerpt": pt::text(helaNyhetsbeskrivningen),
       nyhetsbild
     }`,
     { count }
