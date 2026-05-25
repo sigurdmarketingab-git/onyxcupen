@@ -16,52 +16,54 @@ export default defineType({
     }),
     defineField({
       name: "slug",
-      title: "URL-slug",
+      title: "URL-adress",
       type: "slug",
-      description: 'Genereras automatiskt. Används i URL:en, t.ex. "/cupinfo/rod-niva".',
+      description: "Skapas automatiskt — behöver inte ändras.",
       options: { source: "namnPaNivan", maxLength: 96 },
       validation: (r) => r.required(),
+      hidden: ({ document }) => !!document?.slug,
     }),
     defineField({
       name: "farg",
-      title: "Accentfärg",
+      title: "Färg för den här nivån",
       type: "color",
-      description: "Välj en färg som representerar den här nivån (används i cupinfo-listan).",
+      description: "Visas som en liten färgprick i cupinfo-listan på sidan.",
     }),
 
     // ─── Spelschema ───────────────────────────────────────────────
     defineField({
       name: "spelschemaEtikett",
-      title: "Spelschema-etikett",
+      title: "Etikett vid spelschemat",
       type: "string",
       description: 'T.ex. "2026 – Uppdaterat 2026-09-09 kl 16:00".',
     }),
     defineField({
       name: "spelschema",
-      title: "Spelschema – aktuellt år",
+      title: "Spelschema – klasser",
       type: "array",
-      description: "En rad per klass. Dra för att ändra ordning. Lämna tom om spelschema saknas.",
+      description: "Lägg till en rad per klass. Dra för att ändra ordning. Lämna tom om spelschema inte finns ännu.",
       of: [
         {
           type: "object",
           fields: [
             defineField({
               name: "klass",
-              title: "Klass",
+              title: "Klassnamn",
               type: "string",
+              description: 'T.ex. "Flickor Röd A".',
               validation: (r) => r.required(),
             }),
             defineField({
               name: "href",
               title: "Länk till spelprogram",
               type: "url",
-              description: "Lämna tom om klassen saknar spelprogram.",
+              description: "Klistra in länken till spelprogrammet. Lämna tom om klassen saknar spelprogram.",
             }),
             defineField({
               name: "notat",
-              title: "Notat",
+              title: "Notat (valfritt)",
               type: "string",
-              description: 'T.ex. "UTGÅR!" — visas som orange etikett.',
+              description: 'Visas som en orange varningstext, t.ex. "UTGÅR!".',
             }),
           ],
           preview: { select: { title: "klass", subtitle: "href" } },
@@ -72,9 +74,10 @@ export default defineType({
     // ─── Klassindelning ───────────────────────────────────────────
     defineField({
       name: "klassindelningTextForst",
-      title: "Klassindelning – text ovanför tabellen",
+      title: "Klassindelning – inledande text",
       type: "text",
       rows: 4,
+      description: "Syns ovanför klassindelnings-tabellen.",
     }),
     defineField({
       name: "klassindelning",
@@ -89,6 +92,7 @@ export default defineType({
               name: "klass",
               title: "Klass",
               type: "string",
+              description: 'T.ex. "Flickor Röd A".',
               validation: (r) => r.required(),
             }),
             defineField({
@@ -105,19 +109,18 @@ export default defineType({
     }),
     defineField({
       name: "klassindelningTextEfter",
-      title: "Klassindelning – text nedanför tabellen",
+      title: "Klassindelning – avslutande text",
       type: "text",
       rows: 6,
+      description: "Syns nedanför klassindelnings-tabellen.",
     }),
 
-    // ─── Avgifter — flexibel array ────────────────────────────────
-    // Fronten anpassar sig till valfritt antal kort (1, 2, 3...).
+    // ─── Avgifter ─────────────────────────────────────────────────
     defineField({
       name: "avgifter",
       title: "Avgifter – priskort",
       type: "array",
-      description:
-        "Lägg till ett kort per avgiftsalternativ. Dra för att ändra ordning. Fronten visar alla kort du lägger till.",
+      description: "Lägg till ett kort per avgiftsalternativ. Dra för att ändra ordning.",
       of: [
         {
           type: "object",
@@ -143,9 +146,9 @@ export default defineType({
             }),
             defineField({
               name: "highlight",
-              title: "Markerat kort?",
+              title: "Markera det här kortet?",
               type: "boolean",
-              description: "Ger kortet orange ram. Välj max ett per år.",
+              description: "Ger kortet en orange kant så det sticker ut. Välj max ett per år.",
               initialValue: false,
             }),
             defineField({
@@ -153,7 +156,7 @@ export default defineType({
               title: "Vad ingår",
               type: "array",
               of: [{ type: "string" }],
-              description: "En rad per inkluderad sak.",
+              description: "Skriv in en sak per rad — tryck Enter för ny rad.",
             }),
             defineField({
               name: "notat",
@@ -171,27 +174,25 @@ export default defineType({
     }),
     defineField({
       name: "avgifterNotis",
-      title: "Avgifter – orange notisruta",
+      title: "Avgifter – informationsruta",
       type: "text",
       rows: 4,
-      description:
-        "Texten i den orange rutan under priskorten (info om fria ledare, betalningsdatum etc.).",
+      description: "Text i den orange rutan under priskorten (t.ex. info om fria ledare och betalningsdatum).",
     }),
 
-    // ─── Spelregler — flexibel array ──────────────────────────────
-    // En ruta per regelavsnitt. Fronten visar alla rutor i 2-kol grid.
+    // ─── Spelregler ───────────────────────────────────────────────
     defineField({
       name: "spelreglerIngress",
-      title: "Spelregler – inledande mening",
+      title: "Spelregler – inledande text",
       type: "text",
       rows: 3,
+      description: "Syns ovanför regelavsnitten.",
     }),
     defineField({
       name: "spelregler",
-      title: "Spelregler – informationsrutor",
+      title: "Spelregler – avsnitt",
       type: "array",
-      description:
-        "En ruta per regelavsnitt. Dra för att ändra ordning. Fronten visar alla rutor i ett 2-kolumnsgrid.",
+      description: "Lägg till ett avsnitt per ämne, t.ex. Matchtider, Straffar, WO. Dra för att ändra ordning.",
       of: [
         {
           type: "object",
@@ -205,7 +206,7 @@ export default defineType({
             }),
             defineField({
               name: "innehall",
-              title: "Innehåll",
+              title: "Text",
               type: "text",
               rows: 5,
             }),
@@ -215,14 +216,12 @@ export default defineType({
       ],
     }),
 
-    // ─── Övrig information — flexibel array ──────────────────────
-    // En ruta per ämne. Fronten visar alla rutor i 2-kol grid.
+    // ─── Övrig information ────────────────────────────────────────
     defineField({
       name: "ovrigInfo",
-      title: "Övrig information – informationsrutor",
+      title: "Övrig information – avsnitt",
       type: "array",
-      description:
-        "En ruta per ämne (t.ex. Mat, Boende, Avhopp). Dra för att ändra ordning. Fronten visar alla rutor i ett 2-kolumnsgrid.",
+      description: "Lägg till ett avsnitt per ämne, t.ex. Mat, Boende, Avhopp. Dra för att ändra ordning.",
       of: [
         {
           type: "object",
@@ -236,7 +235,7 @@ export default defineType({
             }),
             defineField({
               name: "innehall",
-              title: "Innehåll",
+              title: "Text",
               type: "text",
               rows: 6,
             }),
