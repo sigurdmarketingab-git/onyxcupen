@@ -75,7 +75,7 @@ export default async function NyheterPage() {
                               {nyhet.titel}
                             </h2>
                             <p className="text-sm text-[#9ca3af] leading-relaxed line-clamp-3">
-                              {nyhet.kortBeskrivning}
+                              {nyhet.excerpt}
                             </p>
                             <span className="mt-4 inline-block text-xs font-semibold text-[#F3811F]">
                               Läs mer →

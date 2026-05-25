@@ -24,7 +24,9 @@ export async function getInstallningar() {
 export async function getAllNyheter() {
   return client.fetch(
     `*[_type == "nyhet"] | order(publishedAt desc) {
-      _id, titel, "slug": slug.current, publishedAt, kortBeskrivning, nyhetsbild
+      _id, titel, "slug": slug.current, publishedAt,
+      "excerpt": string::slice(pt::text(helaNyhetsbeskrivningen), 0, 220),
+      nyhetsbild
     }`
   );
 }
@@ -32,7 +34,9 @@ export async function getAllNyheter() {
 export async function getLatestNyheter(count = 6) {
   return client.fetch(
     `*[_type == "nyhet"] | order(publishedAt desc)[0...$count] {
-      _id, titel, "slug": slug.current, publishedAt, kortBeskrivning, nyhetsbild
+      _id, titel, "slug": slug.current, publishedAt,
+      "excerpt": string::slice(pt::text(helaNyhetsbeskrivningen), 0, 220),
+      nyhetsbild
     }`,
     { count }
   );

@@ -88,8 +88,8 @@ export default async function NyhetPage({ params }: { params: Promise<{ slug: st
                 value={nyhet.helaNyhetsbeskrivningen}
                 components={portableTextComponents}
               />
-            ) : nyhet.kortBeskrivning ? (
-              <p>{nyhet.kortBeskrivning}</p>
+            ) : nyhet.excerpt ? (
+              <p>{nyhet.excerpt}</p>
             ) : null}
           </div>
         </article>

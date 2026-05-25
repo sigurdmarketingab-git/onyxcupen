@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MapPin, Calendar, Info, ChevronRight, Clock, CreditCard, ChevronDown, Check, BedDouble, BarChart2, Compass } from "lucide-react";
 import Button from "@/components/Button";
 import { getInstallningar, getLatestNyheter, urlFor } from "@/lib/sanity";
+import { isAnmalningOppen, formatSwedishDate } from "@/lib/registration";
 
 const infoCards = [
   {
@@ -44,15 +45,18 @@ export default async function HomePage() {
     getLatestNyheter(3),
   ]);
 
-  const isRegistrationOpen = inst?.anmalningsOppen ?? false;
+  const isRegistrationOpen = isAnmalningOppen(inst?.anmalningStangerDatum);
+  const sistaAnmalningsdag = inst?.anmalningStangerDatum
+    ? formatSwedishDate(inst.anmalningStangerDatum)
+    : "–";
 
   const snabbfakta = [
     { icon: Calendar, label: "Datum", value: inst?.cupDatum ?? "–", sub: inst?.cupAr ?? "" },
     { icon: MapPin, label: "Plats", value: inst?.cupPlats ?? "–", sub: inst?.cupOrt ?? "" },
     ...(isRegistrationOpen
       ? [
-          { icon: CreditCard, label: "Anmälningsavgift", value: inst?.anmalningsavgift ?? "–", sub: inst?.anmalningsEnhet ?? "" },
-          { icon: Clock, label: "Sista anmälningsdag", value: inst?.sistaAnmalningsdag ?? "–", sub: "" },
+          { icon: CreditCard, label: "Anmälningsavgift", value: inst?.anmalningsavgift ?? "–", sub: "" },
+          { icon: Clock, label: "Sista anmälningsdag", value: sistaAnmalningsdag, sub: "" },
         ]
       : []),
   ];
@@ -93,7 +97,7 @@ export default async function HomePage() {
                   Anmäl lag
                 </Button>
               )}
-              <Button href="/cupinfo/rod-niva" variant="outlined" size="lg" className="bg-black/25 backdrop-blur-sm">
+              <Button href="#information" variant="outlined" size="lg" className="bg-black/25 backdrop-blur-sm">
                 Läs mer om cupen
               </Button>
             </div>
@@ -137,7 +141,7 @@ export default async function HomePage() {
       )}
 
       {/* INFORMATION — snabb navigering */}
-      <section className="bg-[#181B22] py-20 sm:py-24">
+      <section id="information" className="bg-[#181B22] py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-5">
           <div className="mb-10">
             <p className="text-sm font-semibold uppercase tracking-widest text-[#F3811F] mb-3">
@@ -172,8 +176,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* VARFÖR ONYXCUPEN */}
-      <section id="mer" className="bg-[#181B22] pb-20 sm:pb-28">
+      {/* VARFÖR ONYXCUPEN — visas bara medan anmälan är öppen */}
+      {isRegistrationOpen && <section id="mer" className="bg-[#181B22] pb-20 sm:pb-28">
         <div className="mx-auto max-w-7xl px-5">
           <div className="text-center mb-14">
             <p className="text-sm font-semibold uppercase tracking-widest text-[#F3811F] mb-3">
@@ -265,7 +269,7 @@ export default async function HomePage() {
 
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* NYHETER */}
       {nyheter && nyheter.length > 0 && (
@@ -311,7 +315,7 @@ export default async function HomePage() {
                       <p className="text-xs text-[#9ca3af] mb-2 font-medium">{datum}</p>
                       <h3 className="font-semibold text-white mb-2 leading-snug">{item.titel}</h3>
                       <p className="text-sm text-[#9ca3af] leading-relaxed line-clamp-2">
-                        {item.kortBeskrivning}
+                        {item.excerpt}
                       </p>
                     </div>
                   </Link>
@@ -416,7 +420,7 @@ export default async function HomePage() {
                       Sista anmälningsdag
                     </p>
                     <p className="text-white font-bold text-lg leading-none">
-                      {inst?.sistaAnmalningsdag ?? "–"}
+                      {sistaAnmalningsdag}
                     </p>
                   </div>
                 </div>

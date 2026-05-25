@@ -34,14 +34,6 @@ export default defineType({
       options: { hotspot: true },
     }),
     defineField({
-      name: "kortBeskrivning",
-      title: "Kort beskrivning",
-      description: "Visas i nyhetslistan och på startsidan (ca 1–2 meningar).",
-      type: "text",
-      rows: 3,
-      validation: (r) => r.required(),
-    }),
-    defineField({
       name: "helaNyhetsbeskrivningen",
       title: "Hela nyhetsbeskrivningen",
       type: "array",
