@@ -11,9 +11,10 @@ interface PageHeroProps {
   title: string;
   subtitle?: string;
   breadcrumbs?: Crumb[];
+  accentColor?: string;
 }
 
-export default function PageHero({ label, title, subtitle, breadcrumbs }: PageHeroProps) {
+export default function PageHero({ label, title, subtitle, breadcrumbs, accentColor }: PageHeroProps) {
   return (
     <section className="bg-[#0f1217] pt-14 pb-10 border-b border-white/8">
       <div className="mx-auto max-w-7xl px-5">
@@ -38,7 +39,14 @@ export default function PageHero({ label, title, subtitle, breadcrumbs }: PageHe
             ))}
           </nav>
         )}
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight max-w-2xl">
+        <h1 className="flex items-center gap-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight max-w-2xl">
+          {accentColor && (
+            <span
+              className="shrink-0 w-4 h-4 sm:w-5 sm:h-5 rounded-sm inline-block"
+              style={{ backgroundColor: accentColor, boxShadow: `0 0 0 1px ${accentColor}40` }}
+              aria-hidden="true"
+            />
+          )}
           {title}
         </h1>
         {subtitle && (

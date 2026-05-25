@@ -148,6 +148,7 @@ export default async function CupinfoNiva({
           { label: "Cupinfo", href: "/cupinfo" },
           { label: data.namnPaNivan },
         ]}
+        accentColor={data.farg?.hex}
       />
 
       <div className="bg-[#181B22] py-12">
