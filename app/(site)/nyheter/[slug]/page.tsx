@@ -1,0 +1,99 @@
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
+import { PortableText } from "@portabletext/react";
+import { getNyhet, getAllNyhetSlugs, urlFor } from "@/lib/sanity";
+
+export async function generateStaticParams() {
+  const slugs = await getAllNyhetSlugs();
+  return (slugs ?? []).map((s: { slug: string }) => ({ slug: s.slug }));
+}
+
+function formatDatum(iso: string) {
+  return new Date(iso).toLocaleDateString("sv-SE", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+const portableTextComponents = {
+  types: {
+    image: ({ value }: any) => {
+      const url = urlFor(value).width(800).url();
+      return (
+        <figure className="my-6 rounded-2xl overflow-hidden">
+          <img src={url} alt={value.alt ?? ""} className="w-full object-cover" />
+        </figure>
+      );
+    },
+  },
+};
+
+export default async function NyhetPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const nyhet = await getNyhet(slug);
+
+  if (!nyhet) notFound();
+
+  const imgUrl = nyhet.nyhetsbild ? urlFor(nyhet.nyhetsbild).width(1200).height(675).url() : null;
+
+  return (
+    <div className="bg-[#181B22] py-12">
+      <div className="mx-auto max-w-3xl px-5">
+        <nav aria-label="Brödsmulor" className="flex items-center gap-1 mb-8 flex-wrap">
+          {[
+            { label: "Hem", href: "/" },
+            { label: "Nyheter", href: "/nyheter" },
+            { label: nyhet.titel },
+          ].map((crumb, i) => (
+            <span key={i} className="flex items-center gap-1">
+              {i > 0 && <ChevronRight className="h-3 w-3 text-[#E8E8E8]/25 shrink-0" />}
+              {crumb.href ? (
+                <Link
+                  href={crumb.href}
+                  className="text-xs text-[#E8E8E8]/40 hover:text-[#E8E8E8]/70 transition-colors"
+                >
+                  {crumb.label}
+                </Link>
+              ) : (
+                <span
+                  className="text-xs text-[#E8E8E8]/55 truncate max-w-[200px]"
+                  aria-current="page"
+                >
+                  {crumb.label}
+                </span>
+              )}
+            </span>
+          ))}
+        </nav>
+
+        <article>
+          {nyhet.publishedAt && (
+            <p className="text-xs text-[#E8E8E8]/40 mb-3">{formatDatum(nyhet.publishedAt)}</p>
+          )}
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-8 leading-tight">
+            {nyhet.titel}
+          </h1>
+
+          {imgUrl && (
+            <div className="rounded-2xl overflow-hidden mb-8 aspect-video bg-[#1e2229]">
+              <img src={imgUrl} alt={nyhet.titel} className="w-full h-full object-cover" />
+            </div>
+          )}
+
+          <div className="prose prose-invert max-w-none text-[#E8E8E8]/80 leading-relaxed">
+            {nyhet.helaNyhetsbeskrivningen ? (
+              <PortableText
+                value={nyhet.helaNyhetsbeskrivningen}
+                components={portableTextComponents}
+              />
+            ) : nyhet.kortBeskrivning ? (
+              <p>{nyhet.kortBeskrivning}</p>
+            ) : null}
+          </div>
+        </article>
+      </div>
+    </div>
+  );
+}
