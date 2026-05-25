@@ -190,10 +190,10 @@ export default async function CupinfoNiva({
               {/* Spelschema */}
               {data.spelschema?.length > 0 && (
                 <Section id="spelschema" title="Spelschema" icon={Calendar}>
-                  {data.spelschemaEtikett && (
+                  {data._updatedAt && (
                     <div className="mb-3">
                       <span className="text-xs font-semibold text-[#9ca3af] uppercase tracking-wider">
-                        {data.spelschemaEtikett}
+                        Uppdaterat {new Date(data._updatedAt).toLocaleDateString("sv-SE", { year: "numeric", month: "long", day: "numeric" })}
                       </span>
                     </div>
                   )}

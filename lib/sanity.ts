@@ -84,7 +84,7 @@ export async function getAllCupinfo() {
 
 export async function getCupinfo(slug: string) {
   return client.fetch(
-    `*[_type == "cupinfo" && slug.current == $slug][0]`,
+    `*[_type == "cupinfo" && slug.current == $slug][0] { ..., _updatedAt }`,
     { slug }
   );
 }

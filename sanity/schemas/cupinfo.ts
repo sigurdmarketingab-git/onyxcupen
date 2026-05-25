@@ -32,12 +32,6 @@ export default defineType({
 
     // ─── Spelschema ───────────────────────────────────────────────
     defineField({
-      name: "spelschemaEtikett",
-      title: "Etikett vid spelschemat",
-      type: "string",
-      description: 'T.ex. "2026 – Uppdaterat 2026-09-09 kl 16:00".',
-    }),
-    defineField({
       name: "spelschema",
       title: "Spelschema – klasser",
       type: "array",
@@ -50,7 +44,7 @@ export default defineType({
               name: "klass",
               title: "Klassnamn",
               type: "string",
-              description: 'T.ex. "Flickor Röd A".',
+              placeholder: "T.ex. Flickor Röd A",
               validation: (r) => r.required(),
             }),
             defineField({
@@ -58,12 +52,14 @@ export default defineType({
               title: "Länk till spelprogram",
               type: "url",
               description: "Klistra in länken till spelprogrammet. Lämna tom om klassen saknar spelprogram.",
+              placeholder: "https://www.profixio.com/...",
             }),
             defineField({
               name: "notat",
               title: "Notat (valfritt)",
               type: "string",
-              description: 'Visas som en orange varningstext, t.ex. "UTGÅR!".',
+              description: "Visas som en orange varningstext på raden.",
+              placeholder: "T.ex. UTGÅR!",
             }),
           ],
           preview: { select: { title: "klass", subtitle: "href" } },
@@ -77,7 +73,8 @@ export default defineType({
       title: "Klassindelning – inledande text",
       type: "text",
       rows: 4,
-      description: "Syns ovanför klassindelnings-tabellen.",
+      description: "Syns ovanför klassindelnings-tabellen. Kan lämnas tom.",
+      placeholder: "T.ex. Indelningen nedan gäller för Onyxcupen 2026. Lag i samma klass möter varandra i gruppspelet.",
     }),
     defineField({
       name: "klassindelning",
@@ -92,14 +89,14 @@ export default defineType({
               name: "klass",
               title: "Klass",
               type: "string",
-              description: 'T.ex. "Flickor Röd A".',
+              placeholder: "T.ex. Flickor Röd A",
               validation: (r) => r.required(),
             }),
             defineField({
               name: "argang",
               title: "Årgång",
               type: "string",
-              description: 'T.ex. "2010" eller "2012/2013".',
+              placeholder: "T.ex. 2012 eller 2012/2013",
               validation: (r) => r.required(),
             }),
           ],
@@ -112,7 +109,8 @@ export default defineType({
       title: "Klassindelning – avslutande text",
       type: "text",
       rows: 6,
-      description: "Syns nedanför klassindelnings-tabellen.",
+      description: "Syns nedanför klassindelnings-tabellen. Kan lämnas tom.",
+      placeholder: "T.ex. Dispensspelare kan delta i klasser upp till två år äldre än sin faktiska årgång.",
     }),
 
     // ─── Avgifter ─────────────────────────────────────────────────
