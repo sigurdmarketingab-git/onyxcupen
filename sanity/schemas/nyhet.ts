@@ -13,10 +13,12 @@ export default defineType({
     }),
     defineField({
       name: "slug",
-      title: "Slug (URL)",
+      title: "URL-adress",
       type: "slug",
+      description: "Skapas automatiskt från titeln — behöver inte ändras.",
       options: { source: "titel", maxLength: 96 },
       validation: (r) => r.required(),
+      hidden: ({ document }) => !!document?.slug,
     }),
     defineField({
       name: "publishedAt",

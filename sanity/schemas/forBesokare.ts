@@ -17,7 +17,7 @@ export default defineType({
       name: "kategori",
       title: "Kategori",
       type: "string",
-      description: "Valj vilken kategori den har platsen tillhor. Anvands for att gruppera pa sidan.",
+      description: "Välj kategori — används för att gruppera platser på sidan.",
       options: {
         list: [
           { title: "Aktiviteter", value: "aktiviteter" },
