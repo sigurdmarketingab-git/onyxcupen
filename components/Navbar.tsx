@@ -6,36 +6,60 @@ import { Menu, X, ChevronDown, ChevronRight, Info, Calendar, Users, CreditCard, 
 import { cn } from "@/lib/utils";
 import Button from "@/components/Button";
 
-const navLinks = [
-  {
-    label: "Cupinfo",
-    href: "/cupinfo",
-    children: [
-      { label: "Röd Nivå – All info", href: "/cupinfo/rod-niva", icon: Info },
-      { label: "Spelschema", href: "/cupinfo/rod-niva#spelschema", icon: Calendar },
-      { label: "Klassindelning", href: "/cupinfo/rod-niva#klassindelning", icon: Users },
-      { label: "Avgifter", href: "/cupinfo/rod-niva#avgifter", icon: CreditCard },
-      { label: "Spelregler", href: "/cupinfo/rod-niva#spelregler", icon: BookOpen },
-      { label: "Boende", href: "/boende", icon: BedDouble },
-    ],
-  },
+type CupinfoItem = { slug: string; namnPaNivan: string };
+
+type NavChild = { label: string; href: string; icon: React.ComponentType<{ className?: string }> };
+type NavLink =
+  | { label: string; href: string; children: NavChild[] }
+  | { label: string; href: string; children?: never };
+
+const staticLinks: NavLink[] = [
   { label: "Nyheter", href: "/nyheter" },
   { label: "För besökare", href: "/for-besokare" },
   { label: "Resultat", href: "/resultat" },
   { label: "Kontakt", href: "/kontakt" },
 ];
 
+function buildNavLinks(cupinfoItems: CupinfoItem[]): NavLink[] {
+  if (cupinfoItems.length === 1) {
+    const slug = cupinfoItems[0].slug;
+    const namn = cupinfoItems[0].namnPaNivan;
+    return [
+      {
+        label: "Cupinfo",
+        href: `/cupinfo/${slug}`,
+        children: [
+          { label: `${namn} – All info`, href: `/cupinfo/${slug}`, icon: Info },
+          { label: "Spelschema", href: `/cupinfo/${slug}#spelschema`, icon: Calendar },
+          { label: "Klassindelning", href: `/cupinfo/${slug}#klassindelning`, icon: Users },
+          { label: "Avgifter", href: `/cupinfo/${slug}#avgifter`, icon: CreditCard },
+          { label: "Spelregler", href: `/cupinfo/${slug}#spelregler`, icon: BookOpen },
+          { label: "Boende", href: "/boende", icon: BedDouble },
+        ],
+      },
+      ...staticLinks,
+    ];
+  }
+  return [
+    { label: "Cupinfo", href: "/cupinfo" },
+    ...staticLinks,
+  ];
+}
+
 export default function Navbar({
   anmalningsOppen = false,
   anmalningsUrl,
+  cupinfoItems = [],
 }: {
   anmalningsOppen?: boolean;
   anmalningsUrl?: string | null;
+  cupinfoItems?: CupinfoItem[];
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileSubOpen, setMobileSubOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const navLinks = buildNavLinks(cupinfoItems);
 
   function openDropdown() {
     if (closeTimer.current) clearTimeout(closeTimer.current);

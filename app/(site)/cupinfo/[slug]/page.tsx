@@ -112,13 +112,43 @@ function PrisKort({
   );
 }
 
+// TEST: Temporär mock-data för att testa hur sidan ser ut med fler nivåer.
+// Ta bort mockData och fallbacken nedan när riktiga nivåer finns i Sanity.
+const mockData: Record<string, any> = {
+  "bla-niva": {
+    namnPaNivan: "Blå Nivå",
+    spelschemaEtikett: "2026 – Preliminärt",
+    spelschema: [
+      { _key: "1", klass: "Pojkar Blå A", href: null },
+      { _key: "2", klass: "Pojkar Blå B", href: null },
+      { _key: "3", klass: "Flickor Blå A", href: null },
+    ],
+    klassindelning: [
+      { _key: "1", klass: "Pojkar Blå A", arg: "2008" },
+      { _key: "2", klass: "Pojkar Blå B", arg: "2009" },
+      { _key: "3", klass: "Flickor Blå A", arg: "2008/2009" },
+    ],
+    klassindelningTextForst: "Blå nivå riktar sig till äldre ungdomslag. Samma regler gäller som för röd nivå.",
+    avgifter: [
+      { _key: "1", titel: "Anmälningsavgift", pris: "3 500 kr", enhet: "per lag", highlight: false, items: ["Minst fyra matcher garanterade"] },
+      { _key: "2", titel: "Deltagarpaket 1", pris: "970 kr", enhet: "per person", highlight: true, items: ["Övernattning 2 nätter", "Alla måltider fre–sön"] },
+    ],
+    spelreglerIngress: "Vi följer SIBF:s regler och tävlingsbestämmelser.",
+    spelregler: [
+      { _key: "1", rubrik: "Matchtider", text: "2 × 20 minuter i alla matcher. Effektiv tid." },
+    ],
+    ovrigInfo: [],
+  },
+};
+
 export default async function CupinfoNiva({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const data = await getCupinfo(slug);
+  const sanityData = await getCupinfo(slug);
+  const data = sanityData ?? mockData[slug];
   if (!data) notFound();
 
   // Bygg TOC dynamiskt med ikonnamn som strängar (kan serialiseras över server→client-gränsen)

@@ -1,35 +1,8 @@
 import Link from "next/link";
 import { MapPin, Calendar, Info, ChevronRight, Clock, CreditCard, ChevronDown, Check, BedDouble, BarChart2, Compass } from "lucide-react";
 import Button from "@/components/Button";
-import { getInstallningar, getLatestNyheter, urlFor } from "@/lib/sanity";
+import { getInstallningar, getLatestNyheter, getAllCupinfo, urlFor } from "@/lib/sanity";
 import { isAnmalningOppen, formatSwedishDate } from "@/lib/registration";
-
-const infoCards = [
-  {
-    title: "Cupinfo Röd Nivå",
-    description: "Spelregler, matchtider, dispenser, avgifter och klassindelning.",
-    href: "/cupinfo/rod-niva",
-    icon: Info,
-  },
-  {
-    title: "Boende",
-    description: "Övernattning i arena och hotell i Nyköping med rabatterade priser.",
-    href: "/boende",
-    icon: BedDouble,
-  },
-  {
-    title: "Resultat & Spelprogram",
-    description: "Alla spelscheman och resultat för samtliga klasser.",
-    href: "/resultat",
-    icon: BarChart2,
-  },
-  {
-    title: "För besökare",
-    description: "Aktiviteter och sevärdheter i Nyköping under cuphelgen.",
-    href: "/for-besokare",
-    icon: Compass,
-  },
-];
 
 function formatDatum(iso: string) {
   const d = new Date(iso);
@@ -40,22 +13,62 @@ function formatDatum(iso: string) {
 }
 
 export default async function HomePage() {
-  const [inst, nyheter] = await Promise.all([
+  const [inst, nyheter, cupinfoItems] = await Promise.all([
     getInstallningar(),
     getLatestNyheter(3),
+    getAllCupinfo(),
   ]);
+
+  const cupinfoHref =
+    cupinfoItems?.length === 1
+      ? `/cupinfo/${cupinfoItems[0].slug}`
+      : "/cupinfo";
+  const cupinfoTitle =
+    cupinfoItems?.length === 1 ? cupinfoItems[0].namnPaNivan : "Cupinfo";
+
+  const infoCards = [
+    {
+      title: cupinfoTitle,
+      description: "Spelregler, matchtider, dispenser, avgifter och klassindelning.",
+      href: cupinfoHref,
+      icon: Info,
+    },
+    {
+      title: "Boende",
+      description: "Övernattning i arena och hotell i Nyköping med rabatterade priser.",
+      href: "/boende",
+      icon: BedDouble,
+    },
+    {
+      title: "Resultat & Spelprogram",
+      description: "Alla spelscheman och resultat för samtliga klasser.",
+      href: "/resultat",
+      icon: BarChart2,
+    },
+    {
+      title: "För besökare",
+      description: "Aktiviteter och sevärdheter i Nyköping under cuphelgen.",
+      href: "/for-besokare",
+      icon: Compass,
+    },
+  ];
 
   const isRegistrationOpen = isAnmalningOppen(inst?.anmalningStangerDatum);
   const sistaAnmalningsdag = inst?.anmalningStangerDatum
     ? formatSwedishDate(inst.anmalningStangerDatum)
     : "–";
 
+  const enNivå = cupinfoItems?.length === 1;
+
   const snabbfakta = [
     { icon: Calendar, label: "Datum", value: inst?.cupDatum ?? "–", sub: inst?.cupAr ?? "" },
     { icon: MapPin, label: "Plats", value: inst?.cupPlats ?? "–", sub: inst?.cupOrt ?? "" },
     ...(isRegistrationOpen
       ? [
-          { icon: CreditCard, label: "Anmälningsavgift", value: inst?.anmalningsavgift ?? "–", sub: "" },
+          // Anmälningsavgift visas bara om det är exakt en cupnivå
+          ...(enNivå
+            ? [{ icon: CreditCard, label: "Anmälningsavgift", value: inst?.anmalningsavgift ?? "–", sub: "per lag" }]
+            : []),
           { icon: Clock, label: "Sista anmälningsdag", value: sistaAnmalningsdag, sub: "" },
         ]
       : []),
