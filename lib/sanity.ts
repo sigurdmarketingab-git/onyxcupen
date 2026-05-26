@@ -15,9 +15,12 @@ export function urlFor(source: SanityImageSource) {
   return builder.image(source);
 }
 
+// Bypass CDN for installningar — settings must always be fresh
+const freshClient = client.withConfig({ useCdn: false });
+
 // ─── Installningar (singleton) ────────────────────────────────
 export async function getInstallningar() {
-  return client.fetch(`*[_type == "installningar"][0]`);
+  return freshClient.fetch(`*[_type == "installningar"][0]`);
 }
 
 // ─── Nyheter ──────────────────────────────────────────────────
