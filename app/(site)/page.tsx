@@ -124,7 +124,7 @@ export default async function HomePage() {
         className="relative min-h-[90vh] flex items-center"
         style={{
           backgroundImage:
-            "url('https://onyxcupen.se/wp-content/uploads/2025/07/087A7187-1.avif')",
+            "url('/images/hero-bg.avif')",
           backgroundSize: "cover",
           backgroundPosition: "center top",
         }}
@@ -260,7 +260,7 @@ export default async function HomePage() {
               </div>
               <div className="relative min-h-[260px] md:min-h-0 order-2">
                 <img
-                  src="https://onyxcupen.se/wp-content/uploads/2025/07/image-18.avif"
+                  src="/images/gallery-1.avif"
                   alt="Rosvalla Arena i Nyköping"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
@@ -314,7 +314,7 @@ export default async function HomePage() {
               </div>
               <div className="relative min-h-[260px] md:min-h-0 order-2">
                 <img
-                  src="https://onyxcupen.se/wp-content/uploads/2025/07/image-10.avif"
+                  src="/images/gallery-2.avif"
                   alt="Aktiviteter under cuphelgen"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
@@ -388,17 +388,17 @@ export default async function HomePage() {
           <div className="flex flex-col gap-3 md:hidden">
             <div className="relative aspect-[3/2] rounded-2xl overflow-hidden">
               <img
-                src="https://onyxcupen.se/wp-content/uploads/2025/07/087A8998-1.avif"
+                src="/images/gallery-3.avif"
                 alt="Publik med svensk flagga under Onyxcupen"
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { src: "https://onyxcupen.se/wp-content/uploads/2025/07/087A9281-1.avif", alt: "Spelarna kramar om varandra" },
-                { src: "https://onyxcupen.se/wp-content/uploads/2025/07/54562376486_ac43f3ba36_k-1.avif", alt: "Innebandykillar firar ett mål" },
-                { src: "https://onyxcupen.se/wp-content/uploads/2025/07/54555909365_973de7547c_k-1.avif", alt: "Innebandymatch i Rosvalla" },
-                { src: "https://onyxcupen.se/wp-content/uploads/2025/07/54556531065_37b81c9c30_k-1.avif", alt: "Glada innebandytjejer" },
+                { src: "/images/gallery-4.avif", alt: "Spelarna kramar om varandra" },
+                { src: "/images/gallery-5.avif", alt: "Innebandykillar firar ett mål" },
+                { src: "/images/gallery-6.avif", alt: "Innebandymatch i Rosvalla" },
+                { src: "/images/gallery-7.avif", alt: "Glada innebandytjejer" },
               ].map((p) => (
                 <div key={p.src} className="relative aspect-[4/3] rounded-xl overflow-hidden">
                   <img src={p.src} alt={p.alt} className="absolute inset-0 w-full h-full object-cover" />
@@ -412,14 +412,14 @@ export default async function HomePage() {
             <div className="grid grid-cols-3 gap-3 h-[340px]">
               <div className="relative rounded-2xl overflow-hidden">
                 <img
-                  src="https://onyxcupen.se/wp-content/uploads/2025/07/087A9281-1.avif"
+                  src="/images/gallery-4.avif"
                   alt="Spelarna kramar om varandra"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
               </div>
               <div className="col-span-2 relative rounded-2xl overflow-hidden">
                 <img
-                  src="https://onyxcupen.se/wp-content/uploads/2025/07/087A8998-1.avif"
+                  src="/images/gallery-3.avif"
                   alt="Publik med svensk flagga under Onyxcupen"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
@@ -428,21 +428,21 @@ export default async function HomePage() {
             <div className="grid grid-cols-3 gap-3 h-[240px]">
               <div className="relative rounded-2xl overflow-hidden">
                 <img
-                  src="https://onyxcupen.se/wp-content/uploads/2025/07/54562376486_ac43f3ba36_k-1.avif"
+                  src="/images/gallery-5.avif"
                   alt="Innebandykillar firar ett mål"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
               </div>
               <div className="relative rounded-2xl overflow-hidden">
                 <img
-                  src="https://onyxcupen.se/wp-content/uploads/2025/07/54555909365_973de7547c_k-1.avif"
+                  src="/images/gallery-6.avif"
                   alt="Innebandymatch i Rosvalla"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
               </div>
               <div className="relative rounded-2xl overflow-hidden">
                 <img
-                  src="https://onyxcupen.se/wp-content/uploads/2025/07/54556531065_37b81c9c30_k-1.avif"
+                  src="/images/gallery-7.avif"
                   alt="Glada innebandytjejer"
                   className="absolute inset-0 w-full h-full object-cover"
                 />

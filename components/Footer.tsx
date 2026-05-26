@@ -75,7 +75,7 @@ export default function Footer() {
             <div className="mt-8">
               <p className="text-xs font-semibold text-[#6b7280] mb-3 uppercase tracking-wider">Organisatör</p>
               <img
-                src="https://onyxcupen.se/wp-content/uploads/2024/10/image-1-768x280.webp"
+                src="/images/footer-partner.webp"
                 alt="Onyx Innebandy"
                 className="h-10 w-auto"
               />
@@ -132,17 +132,17 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-4 pt-5 border-t border-white/12 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#6b7280]">
+        <div className="mt-4 pt-5 border-t border-white/12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-xs text-[#6b7280]">
           <span>Alla rättigheter förbehållna © 2026 Onyx Innebandy</span>
           <a
             href="https://sigurdmarketing.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 opacity-100 hover:opacity-100 transition-opacity"
+            className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity"
           >
             <span>Hemsida skapad av ©</span>
             <img
-              src="https://onyxcupen.se/wp-content/uploads/2024/10/Banner-White-Transparent.svg"
+              src="/images/footer-banner.svg"
               alt="Sigurd Marketing"
               className="h-12 w-auto"
             />
