@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -39,6 +40,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen flex flex-col bg-[#181B22] text-[#E8E8E8]" suppressHydrationWarning>
         {children}
+        <Analytics />
       </body>
     </html>
   );
