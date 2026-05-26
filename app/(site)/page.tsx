@@ -104,9 +104,11 @@ export default async function HomePage() {
   ];
 
   const isRegistrationOpen = isAnmalningOppen(inst?.anmalningStangerDatum);
-  const sistaAnmalningsdag = inst?.anmalningStangerDatum
-    ? formatSwedishDate(inst.anmalningStangerDatum)
-    : "–";
+  const sistaAnmalningsdagParts = inst?.anmalningStangerDatum
+    ? formatSwedishDate(inst.anmalningStangerDatum).match(/^(.+)\s(\d{4})$/)
+    : null;
+  const sistaAnmalningsdag = sistaAnmalningsdagParts ? sistaAnmalningsdagParts[1] : "–";
+  const sistaAnmalningsdagAr = sistaAnmalningsdagParts ? sistaAnmalningsdagParts[2] : "";
 
   const enNivå = cupinfoItems?.length === 1;
 
@@ -119,7 +121,7 @@ export default async function HomePage() {
           ...(enNivå
             ? [{ icon: CreditCard, label: "Anmälningsavgift", value: inst?.anmalningsavgift ?? "–", sub: "per lag" }]
             : []),
-          { icon: Clock, label: "Sista anmälningsdag", value: sistaAnmalningsdag, sub: "" },
+          { icon: Clock, label: "Sista anmälningsdag", value: sistaAnmalningsdag, sub: sistaAnmalningsdagAr },
         ]
       : []),
   ];
