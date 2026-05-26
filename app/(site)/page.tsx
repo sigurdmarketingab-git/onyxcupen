@@ -24,6 +24,19 @@ function formatDatum(iso: string) {
   return `${dd}/${mm}/${yyyy}`;
 }
 
+function buildCupDatumText(start?: string | null, slut?: string | null): string {
+  if (!start) return "–";
+  const s = new Date(start);
+  const startDag = s.getDate();
+  const startManad = s.toLocaleDateString("sv-SE", { month: "long" });
+  if (!slut) return `${startDag} ${startManad}`;
+  const e = new Date(slut);
+  const slutDag = e.getDate();
+  const slutManad = e.toLocaleDateString("sv-SE", { month: "long" });
+  if (startManad === slutManad) return `${startDag}–${slutDag} ${slutManad}`;
+  return `${startDag} ${startManad}–${slutDag} ${slutManad}`;
+}
+
 export default async function HomePage() {
   const [inst, nyheter, cupinfoItems] = await Promise.all([
     getInstallningar(),
@@ -98,7 +111,7 @@ export default async function HomePage() {
   const enNivå = cupinfoItems?.length === 1;
 
   const snabbfakta = [
-    { icon: Calendar, label: "Datum", value: inst?.cupDatum ?? "–", sub: inst?.cupAr ?? "" },
+    { icon: Calendar, label: "Datum", value: buildCupDatumText(inst?.cupStartDatum, inst?.cupSlutDatum), sub: inst?.cupAr ?? "" },
     { icon: MapPin, label: "Plats", value: inst?.cupPlats ?? "–", sub: inst?.cupOrt ?? "" },
     ...(isRegistrationOpen
       ? [
@@ -143,7 +156,7 @@ export default async function HomePage() {
             </h1>
             <p className="text-lg sm:text-xl text-white/85 leading-relaxed mb-8 max-w-xl">
               En smidig, rolig och proffsig innebandyhelg – allt under ett tak. Spela och upplev en
-              cup där matcher och atmosfär sitter ihop, {inst?.cupDatum ?? ""} {inst?.cupAr ?? ""} i {inst?.cupOrt ?? "Nyköping"}.
+              cup där matcher och atmosfär sitter ihop, {buildCupDatumText(inst?.cupStartDatum, inst?.cupSlutDatum)} {inst?.cupAr ?? ""} i {inst?.cupOrt ?? "Nyköping"}.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               {isRegistrationOpen && anmalningsUrl && (
