@@ -74,7 +74,7 @@ export default async function HomePage() {
       : []),
   ];
 
-  const anmalningsUrl = inst?.anmalningsUrl ?? "#";
+  const anmalningsUrl = inst?.anmalningsUrl ?? null;
 
   return (
     <>
@@ -105,7 +105,7 @@ export default async function HomePage() {
               cup där matcher och atmosfär sitter ihop, {inst?.cupDatum ?? ""} {inst?.cupAr ?? ""} i {inst?.cupOrt ?? "Nyköping"}.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
-              {isRegistrationOpen && (
+              {isRegistrationOpen && anmalningsUrl && (
                 <Button href={anmalningsUrl} external size="lg">
                   Anmäl lag
                 </Button>
@@ -413,7 +413,7 @@ export default async function HomePage() {
       </section>
 
       {/* CTA-BANNER — visas bara medan anmälan är öppen */}
-      {isRegistrationOpen && (
+      {isRegistrationOpen && anmalningsUrl && (
         <section className="bg-[#181B22] pb-24">
           <div className="mx-auto max-w-7xl px-5">
             <div className="rounded-2xl bg-[#232830] border-t-2 border-[#F3811F] shadow-[0_0_80px_rgba(243,129,31,0.12)] px-8 sm:px-12 py-12 sm:py-16 grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
