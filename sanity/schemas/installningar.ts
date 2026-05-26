@@ -27,10 +27,22 @@ export default defineType({
     }),
     defineField({
       name: "cupDatum",
-      title: "Datum",
+      title: "Datum (visningstext)",
       type: "string",
       description: 'T.ex. "12–14 september". Visas i snabbfaktan på startsidan.',
       validation: (r) => r.required(),
+    }),
+    defineField({
+      name: "cupStartDatum",
+      title: "Startdatum (ISO)",
+      type: "date",
+      description: "Cupens första dag. Används för Google-sökning och rich snippets.",
+    }),
+    defineField({
+      name: "cupSlutDatum",
+      title: "Slutdatum (ISO)",
+      type: "date",
+      description: "Cupens sista dag. Används för Google-sökning och rich snippets.",
     }),
     defineField({
       name: "cupPlats",

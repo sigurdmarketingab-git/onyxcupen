@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MapPin, Calendar, Info, ChevronRight, Clock, CreditCard, ChevronDown, Check, BedDouble, BarChart2, Compass } from "lucide-react";
+import Button from "@/components/Button";
+import { getInstallningar, getLatestNyheter, getAllCupinfo, urlFor } from "@/lib/sanity";
+import { isAnmalningOppen, formatSwedishDate } from "@/lib/registration";
 
 export const metadata: Metadata = {
   title: "Onyxcupen – Innebandycup i Nyköping",
@@ -12,29 +15,6 @@ export const metadata: Metadata = {
     url: "https://onyxcupen.se",
   },
 };
-
-const sportsEventSchema = {
-  "@context": "https://schema.org",
-  "@type": "SportsEvent",
-  name: "Onyxcupen 2026",
-  description: "Innebandycup för ungdomslag i Nyköping, Rosvalla Arena.",
-  location: {
-    "@type": "SportsActivityLocation",
-    name: "Rosvalla Arena",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Rosvalla",
-      addressLocality: "Nyköping",
-      addressCountry: "SE",
-    },
-  },
-  organizer: { "@type": "Organization", name: "Onyx Innebandy", url: "https://onyxcupen.se" },
-  sport: "Floorball",
-  url: "https://onyxcupen.se",
-};
-import Button from "@/components/Button";
-import { getInstallningar, getLatestNyheter, getAllCupinfo, urlFor } from "@/lib/sanity";
-import { isAnmalningOppen, formatSwedishDate } from "@/lib/registration";
 
 function formatDatum(iso: string) {
   const d = new Date(iso);
@@ -50,6 +30,31 @@ export default async function HomePage() {
     getLatestNyheter(3),
     getAllCupinfo(),
   ]);
+
+  const sportsEventSchema = {
+    "@context": "https://schema.org",
+    "@type": "SportsEvent",
+    name: `Onyxcupen ${inst?.cupAr ?? "2026"}`,
+    description: "Innebandycup för ungdomslag i Nyköping, Rosvalla Arena.",
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    image: ["https://onyxcupen.se/og-default.jpg"],
+    location: {
+      "@type": "SportsActivityLocation",
+      name: inst?.cupPlats ?? "Rosvalla Arena",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Rosvalla",
+        addressLocality: inst?.cupOrt ?? "Nyköping",
+        addressCountry: "SE",
+      },
+    },
+    organizer: { "@type": "Organization", name: "Onyx Innebandy", url: "https://onyxcupen.se" },
+    sport: "Floorball",
+    url: "https://onyxcupen.se",
+    ...(inst?.cupStartDatum ? { startDate: inst.cupStartDatum } : {}),
+    ...(inst?.cupSlutDatum ? { endDate: inst.cupSlutDatum } : {}),
+  };
 
   const cupinfoHref =
     cupinfoItems?.length === 1
