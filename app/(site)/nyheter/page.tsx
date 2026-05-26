@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
+
+export const metadata: Metadata = {
+  title: "Nyheter",
+  description:
+    "Senaste nytt om Onyxcupen – anmälan, spelschema, praktisk info och uppdateringar inför innebandycupen i Nyköping.",
+};
 import SectionLabel from "@/components/SectionLabel";
 import Link from "next/link";
 import { getAllNyheter, urlFor } from "@/lib/sanity";

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PageHero from "@/components/PageHero";
 import TocAccordion, { type TocItem } from "@/components/TocAccordion";
@@ -5,6 +6,21 @@ import { getCupinfo, getAllCupinfoSlugs } from "@/lib/sanity";
 import { ExternalLink, Check, Calendar, Users, CreditCard, BookOpen, Layers, type LucideIcon } from "lucide-react";
 
 const tocIconMap: Record<string, LucideIcon> = { Calendar, Users, CreditCard, BookOpen, Layers };
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const data = await getCupinfo(slug);
+  if (!data) return {};
+  return {
+    title: `${data.namnPaNivan} – Cupinfo`,
+    description: `Spelschema, klassindelning, avgifter och spelregler för ${data.namnPaNivan} i Onyxcupen 2026 i Nyköping.`,
+    openGraph: {
+      title: `${data.namnPaNivan} – Onyxcupen 2026`,
+      description: `All information om ${data.namnPaNivan}: spelschema, klasser, avgifter och regler.`,
+      url: `https://onyxcupen.se/cupinfo/${slug}`,
+    },
+  };
+}
 
 export async function generateStaticParams() {
   const slugs = await getAllCupinfoSlugs();

@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Cupinfo",
+  description:
+    "Välj din nivå och hitta spelschema, klassindelning, avgifter och all praktisk information om Onyxcupen 2026 i Nyköping.",
+};
 import PageHero from "@/components/PageHero";
 import { ChevronRight } from "lucide-react";
 import { getAllCupinfo } from "@/lib/sanity";

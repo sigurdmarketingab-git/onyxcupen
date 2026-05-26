@@ -1,8 +1,30 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 import { getNyhet, getAllNyhetSlugs, urlFor } from "@/lib/sanity";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const nyhet = await getNyhet(slug);
+  if (!nyhet) return {};
+  const excerpt = nyhet.excerpt ?? nyhet.titel;
+  return {
+    title: nyhet.titel,
+    description: excerpt.length > 160 ? excerpt.slice(0, 157) + "..." : excerpt,
+    openGraph: {
+      title: nyhet.titel,
+      description: excerpt.length > 160 ? excerpt.slice(0, 157) + "..." : excerpt,
+      type: "article",
+      publishedTime: nyhet.publishedAt,
+      url: `https://onyxcupen.se/nyheter/${slug}`,
+      ...(nyhet.nyhetsbild
+        ? { images: [{ url: urlFor(nyhet.nyhetsbild).width(1200).height(630).url(), width: 1200, height: 630 }] }
+        : {}),
+    },
+  };
+}
 
 export async function generateStaticParams() {
   const slugs = await getAllNyhetSlugs();
@@ -38,8 +60,21 @@ export default async function NyhetPage({ params }: { params: Promise<{ slug: st
 
   const imgUrl = nyhet.nyhetsbild ? urlFor(nyhet.nyhetsbild).width(1200).height(675).url() : null;
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: nyhet.titel,
+    datePublished: nyhet.publishedAt,
+    publisher: { "@type": "Organization", name: "Onyx Innebandy", url: "https://onyxcupen.se" },
+    ...(imgUrl ? { image: [imgUrl] } : {}),
+  };
+
   return (
     <div className="bg-[#181B22] py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <div className="mx-auto max-w-3xl px-5">
         <nav aria-label="Brödsmulor" className="flex items-center gap-1 mb-8 flex-wrap">
           {[

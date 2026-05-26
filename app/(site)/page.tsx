@@ -1,5 +1,37 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { MapPin, Calendar, Info, ChevronRight, Clock, CreditCard, ChevronDown, Check, BedDouble, BarChart2, Compass } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Onyxcupen – Innebandycup i Nyköping",
+  description:
+    "Sveriges roligaste innebandycup för ungdomslag. Spela i Rosvalla Arena i Nyköping, september 2026. Anmäl ditt lag och säkra platsen.",
+  openGraph: {
+    title: "Onyxcupen – Innebandycup i Nyköping",
+    description: "Sveriges roligaste innebandycup för ungdomslag. Spela i Rosvalla Arena i Nyköping, september 2026.",
+    url: "https://onyxcupen.se",
+  },
+};
+
+const sportsEventSchema = {
+  "@context": "https://schema.org",
+  "@type": "SportsEvent",
+  name: "Onyxcupen 2026",
+  description: "Innebandycup för ungdomslag i Nyköping, Rosvalla Arena.",
+  location: {
+    "@type": "SportsActivityLocation",
+    name: "Rosvalla Arena",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Rosvalla",
+      addressLocality: "Nyköping",
+      addressCountry: "SE",
+    },
+  },
+  organizer: { "@type": "Organization", name: "Onyx Innebandy", url: "https://onyxcupen.se" },
+  sport: "Floorball",
+  url: "https://onyxcupen.se",
+};
 import Button from "@/components/Button";
 import { getInstallningar, getLatestNyheter, getAllCupinfo, urlFor } from "@/lib/sanity";
 import { isAnmalningOppen, formatSwedishDate } from "@/lib/registration";
@@ -78,6 +110,10 @@ export default async function HomePage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(sportsEventSchema) }}
+      />
       {/* HERO */}
       <section
         className="relative min-h-[90vh] flex items-center"

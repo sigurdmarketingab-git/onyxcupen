@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import { Mail } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Kontakt",
+  description:
+    "Kontakta Onyxcupens arrangörer. Vi hjälper dig med frågor om anmälan, spelschema och praktisk information om cupen i Nyköping.",
+};
 import { getAllKontakter, urlFor } from "@/lib/sanity";
 
 export default async function KontaktPage() {

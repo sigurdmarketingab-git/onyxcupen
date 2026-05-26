@@ -15,8 +15,27 @@ interface PageHeroProps {
 }
 
 export default function PageHero({ label, title, subtitle, breadcrumbs, accentColor }: PageHeroProps) {
+  const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: breadcrumbs.map((crumb, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: crumb.label,
+          ...(crumb.href ? { item: `https://onyxcupen.se${crumb.href}` } : {}),
+        })),
+      }
+    : null;
+
   return (
     <section className="bg-[#0f1217] pt-14 pb-10 border-b border-white/8">
+      {breadcrumbSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        />
+      )}
       <div className="mx-auto max-w-7xl px-5">
         {breadcrumbs && breadcrumbs.length > 0 && (
           <nav aria-label="Brödsmulor" className="flex items-center gap-1 mb-5 flex-wrap">

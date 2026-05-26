@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import { ExternalLink } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Resultat",
+  description:
+    "Cupresultat från Onyxcupen – se hur det gick för alla lag och nivåer. Resultat hämtade direkt från innebandy.se.",
+};
 import { getAllResultat } from "@/lib/sanity";
 
 export default async function ResultatPage() {

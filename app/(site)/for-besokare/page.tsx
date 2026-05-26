@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import SectionLabel from "@/components/SectionLabel";
 import { ExternalLink } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "För besökare",
+  description:
+    "Tips på aktiviteter och sevärdheter i Nyköping under Onyxcupen-helgen. Perfekt för familjer och supportrar.",
+};
 import { getAllForBesokare, urlFor } from "@/lib/sanity";
 
 const kategoriLabels: Record<string, string> = {

@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import { ExternalLink, MapPin, Phone } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Boende",
+  description:
+    "Boendealternativ nära Rosvalla Arena i Nyköping under Onyxcupen 2026. Hitta hotell och stugbyar för hela laget.",
+};
 import { getAllBoende, urlFor } from "@/lib/sanity";
 
 export default async function BoendePage() {
