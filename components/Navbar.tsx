@@ -174,12 +174,12 @@ export default function Navbar({
       {/* Mobile drawer panel */}
       <div
         className={cn(
-          "fixed top-0 right-0 h-full z-[60] w-[88vw] bg-[#181B22] shadow-2xl lg:hidden flex flex-col transition-translate duration-300 ease-out",
+          "fixed top-0 right-0 h-full z-[60] w-[88vw] bg-[#181B22] shadow-2xl lg:hidden flex flex-col overflow-y-auto transition-translate duration-300 ease-out",
           mobileOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
-        {/* Drawer header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-white/12">
+        {/* Drawer header — sticky så att stängkrysset syns medan resten scrollar */}
+        <div className="sticky top-0 z-10 shrink-0 bg-[#181B22] flex items-center justify-between px-5 py-4 border-b border-white/12">
           <Link href="/" onClick={() => setMobileOpen(false)}>
             <img src="/logo.png" alt="Onyxcupen" className="h-10 w-auto" />
           </Link>
@@ -192,8 +192,9 @@ export default function Navbar({
           </button>
         </div>
 
-        {/* Drawer nav */}
-        <nav className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-1">
+        {/* Drawer nav — ingen egen scroll: hela panelen är en enda stack, så att
+            Cupinfo-dropdownen puttar ner CTA:n och co-branden under sig */}
+        <nav className="flex-1 px-4 py-4 flex flex-col gap-1">
           {navLinks.map((link) =>
             link.children ? (
               <div key={link.label}>
@@ -250,7 +251,7 @@ export default function Navbar({
 
         {/* Drawer footer CTA */}
         {anmalningsOppen && anmalningsUrl && (
-          <div className="px-4 py-5 border-t border-white/12">
+          <div className="shrink-0 px-4 py-5 border-t border-white/12">
             <Button href={anmalningsUrl} external size="lg" className="w-full">
               Anmäl lag
             </Button>
@@ -258,8 +259,8 @@ export default function Navbar({
         )}
 
         {/* Nyköpings Vinterspel */}
-        <div className="px-5 py-5 border-t border-white/12">
-          <VinterspelMark variant="footer" />
+        <div className="shrink-0 px-5 py-5 border-t border-white/12">
+          <VinterspelMark variant="drawer" />
         </div>
       </div>
 

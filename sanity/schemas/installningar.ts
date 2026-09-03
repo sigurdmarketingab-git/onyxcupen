@@ -18,6 +18,17 @@ export default defineType({
           }),
       },
     }),
+
+    // ─── Startsidans toppbild ─────────────────────────────────────
+    defineField({
+      name: "heroBild",
+      title: "Bakgrundsbild högst upp på startsidan",
+      type: "image",
+      description:
+        'Rekommenderad storlek: 2400 × 1350 px (liggande, 16:9). Minst 1920 px bred — mindre bilder blir suddiga på stora skärmar. Spara som JPG eller WebP och håll filen under 500 kB; det här är det första besökaren laddar, så tunga bilder gör sidan långsam. Bilden skalas alltid så att den täcker hela ytan, vilket innebär att kanterna beskärs olika mycket beroende på skärmstorlek. Klicka på "Hotspot" efter uppladdning och placera cirkeln på det viktigaste i bilden — den punkten är alltid kvar i bild. Lämna tomt för att behålla nuvarande standardbild.',
+      options: { hotspot: true },
+    }),
+
     defineField({
       name: "cupAr",
       title: "Cup-år",
@@ -71,16 +82,6 @@ export default defineType({
       title: "Länk till anmälningsformulär",
       type: "url",
       description: "Den URL som anmälningsknappen pekar till.",
-    }),
-
-    // ─── Startsidans toppbild ─────────────────────────────────────
-    defineField({
-      name: "heroBild",
-      title: "Bakgrundsbild högst upp på startsidan",
-      type: "image",
-      description:
-        'Rekommenderad storlek: 2400 × 1350 px (liggande, 16:9). Minst 1920 px bred — mindre bilder blir suddiga på stora skärmar. Spara som JPG eller WebP och håll filen under 500 kB; det här är det första besökaren laddar, så tunga bilder gör sidan långsam. Bilden skalas alltid så att den täcker hela ytan, vilket innebär att kanterna beskärs olika mycket beroende på skärmstorlek. Klicka på "Hotspot" efter uppladdning och placera cirkeln på det viktigaste i bilden — den punkten är alltid kvar i bild. Lämna tomt för att behålla nuvarande standardbild.',
-      options: { hotspot: true },
     }),
 
     // ─── Nyköpings Vinterspel ─────────────────────────────────────

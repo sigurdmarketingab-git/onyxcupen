@@ -4,7 +4,7 @@ const TITLE = "Onyxcupen är en del av Nyköpings Vinterspel";
 export const VINTERSPEL_LOGO = "/images/vinterspel/vinterspel-liggande-vit.svg";
 const SYMBOL = "/images/vinterspel/vinterspel-symbol-vit.svg";
 
-type Variant = "hero" | "footer" | "navbar";
+type Variant = "hero" | "footer" | "navbar" | "drawer";
 
 /**
  * Endorsement-lockup som visar att Onyxcupen ingår i Nyköpings Vinterspel.
@@ -30,6 +30,21 @@ export default function VinterspelMark({
             Nyköpings Vinterspel
           </span>
         </span>
+      </div>
+    );
+  }
+
+  if (variant === "drawer") {
+    return (
+      <div className={cn("flex items-center gap-4", className)} title={TITLE}>
+        <span className="text-xs font-semibold uppercase tracking-wider text-[#6b7280] shrink-0">
+          En del av
+        </span>
+        <img
+          src={VINTERSPEL_LOGO}
+          alt="Nyköpings Vinterspel"
+          className="h-11 w-auto"
+        />
       </div>
     );
   }
