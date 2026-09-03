@@ -5,6 +5,7 @@ import { useState, useRef } from "react";
 import { Menu, X, ChevronDown, ChevronRight, Info, Calendar, Users, CreditCard, BookOpen, BedDouble } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Button from "@/components/Button";
+import VinterspelMark from "@/components/VinterspelMark";
 
 type CupinfoItem = { slug: string; namnPaNivan: string };
 
@@ -74,10 +75,14 @@ export default function Navbar({
     <>
       <header className="sticky top-0 z-40 w-full border-b border-white/12 bg-[#181B22]/92 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-5 py-4 flex items-center justify-between gap-8">
-          {/* Logo */}
-          <Link href="/" className="flex items-center shrink-0">
-            <img src="/logo.png" alt="Onyxcupen" className="h-12 w-auto" />
-          </Link>
+          {/* Logo + co-brand */}
+          <div className="flex items-center gap-4 shrink-0">
+            <Link href="/" className="flex items-center shrink-0">
+              <img src="/logo.png" alt="Onyxcupen" className="h-12 w-auto" />
+            </Link>
+            <span className="hidden xl:block h-9 w-px bg-white/15 shrink-0" aria-hidden="true" />
+            <VinterspelMark variant="navbar" className="hidden xl:flex shrink-0" />
+          </div>
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-2">
@@ -251,6 +256,11 @@ export default function Navbar({
             </Button>
           </div>
         )}
+
+        {/* Nyköpings Vinterspel */}
+        <div className="px-5 py-5 border-t border-white/12">
+          <VinterspelMark variant="footer" />
+        </div>
       </div>
 
     </>

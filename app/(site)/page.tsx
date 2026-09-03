@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { MapPin, Calendar, Info, ChevronRight, Clock, CreditCard, ChevronDown, Check, BedDouble, BarChart2, Compass } from "lucide-react";
 import Button from "@/components/Button";
-import VinterspelMark from "@/components/VinterspelMark";
+import VinterspelMark, { VINTERSPEL_LOGO } from "@/components/VinterspelMark";
 import { getInstallningar, getLatestNyheter, getAllCupinfo, urlFor } from "@/lib/sanity";
 import { isAnmalningOppen, formatSwedishDate } from "@/lib/registration";
 
@@ -129,6 +129,17 @@ export default async function HomePage() {
 
   const anmalningsUrl = inst?.anmalningsUrl ?? null;
 
+  // Hero-bakgrund: Sanity-bilden om den finns, annars standardbilden.
+  // Hotspot översätts till background-position så att den punkt kunden
+  // markerat alltid är kvar i bild när "cover" beskär kanterna.
+  const heroBildUrl = inst?.heroBild
+    ? urlFor(inst.heroBild).width(2400).auto("format").quality(80).url()
+    : "/images/hero-bg.avif";
+  const heroHotspot = inst?.heroBild?.hotspot;
+  const heroBildPosition = heroHotspot
+    ? `${heroHotspot.x * 100}% ${heroHotspot.y * 100}%`
+    : "center top";
+
   return (
     <>
       <script
@@ -139,10 +150,9 @@ export default async function HomePage() {
       <section
         className="relative min-h-[90vh] flex items-center"
         style={{
-          backgroundImage:
-            "url('/images/hero-bg.avif')",
+          backgroundImage: `url('${heroBildUrl}')`,
           backgroundSize: "cover",
-          backgroundPosition: "center top",
+          backgroundPosition: heroBildPosition,
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/65 to-[#181B22]" />
@@ -342,6 +352,34 @@ export default async function HomePage() {
           </div>
         </div>
       </section>}
+
+      {/* NYKÖPINGS VINTERSPEL — visas bara när texten är ifylld i Sanity */}
+      {inst?.vinterspelText && (
+        <section className="bg-[#181B22] pb-20 sm:pb-24">
+          <div className="mx-auto max-w-7xl px-5">
+            <div className="rounded-2xl bg-[#232830] border border-white/12 p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-8 sm:gap-10">
+              <img
+                src={VINTERSPEL_LOGO}
+                alt="Nyköpings Vinterspel"
+                className="h-20 sm:h-24 w-auto shrink-0 self-start"
+              />
+              <div className="min-w-0 max-w-3xl">
+                <p className="text-xs font-semibold uppercase tracking-widest text-[#F3811F] mb-3">
+                  Nyköpings Vinterspel
+                </p>
+                {inst.vinterspelRubrik && (
+                  <h2 className="text-2xl sm:text-3xl font-bold text-white leading-snug mb-3">
+                    {inst.vinterspelRubrik}
+                  </h2>
+                )}
+                <p className="text-[#9ca3af] leading-relaxed whitespace-pre-line">
+                  {inst.vinterspelText}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* NYHETER */}
       {nyheter && nyheter.length > 0 && (

@@ -1,9 +1,10 @@
 import { cn } from "@/lib/utils";
 
 const TITLE = "Onyxcupen är en del av Nyköpings Vinterspel";
-const LOGO = "/images/vinterspel/vinterspel-liggande-vit.svg";
+export const VINTERSPEL_LOGO = "/images/vinterspel/vinterspel-liggande-vit.svg";
+const SYMBOL = "/images/vinterspel/vinterspel-symbol-vit.svg";
 
-type Variant = "hero" | "footer";
+type Variant = "hero" | "footer" | "navbar";
 
 /**
  * Endorsement-lockup som visar att Onyxcupen ingår i Nyköpings Vinterspel.
@@ -16,6 +17,23 @@ export default function VinterspelMark({
   variant: Variant;
   className?: string;
 }) {
+  if (variant === "navbar") {
+    // Symbolen istället för hela lockupen — wordmarket blir oläsbart i
+    // navbarens höjd, så namnet skrivs ut som riktig text bredvid.
+    return (
+      <div className={cn("flex items-center gap-2.5", className)} title={TITLE}>
+        <img src={SYMBOL} alt="" className="h-8 w-auto opacity-80" />
+        <span className="text-[11px] leading-tight text-[#9ca3af]">
+          En del av
+          <br />
+          <span className="font-semibold text-[#c4cad4]">
+            Nyköpings Vinterspel
+          </span>
+        </span>
+      </div>
+    );
+  }
+
   if (variant === "footer") {
     return (
       <div className={className}>
@@ -23,7 +41,7 @@ export default function VinterspelMark({
           En del av
         </p>
         <img
-          src={LOGO}
+          src={VINTERSPEL_LOGO}
           alt="Nyköpings Vinterspel"
           title={TITLE}
           className="h-14 w-auto"
@@ -44,7 +62,11 @@ export default function VinterspelMark({
       <span className="text-xs font-semibold uppercase tracking-widest text-white/70">
         En del av
       </span>
-      <img src={LOGO} alt="Nyköpings Vinterspel" className="h-14 w-auto" />
+      <img
+        src={VINTERSPEL_LOGO}
+        alt="Nyköpings Vinterspel"
+        className="h-14 w-auto"
+      />
     </div>
   );
 }
