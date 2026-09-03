@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { MapPin, Calendar, Info, ChevronRight, Clock, CreditCard, ChevronDown, Check, BedDouble, BarChart2, Compass } from "lucide-react";
 import Button from "@/components/Button";
+import VinterspelMark from "@/components/VinterspelMark";
 import { getInstallningar, getLatestNyheter, getAllCupinfo, urlFor } from "@/lib/sanity";
 import { isAnmalningOppen, formatSwedishDate } from "@/lib/registration";
 
@@ -170,6 +171,8 @@ export default async function HomePage() {
                 Läs mer om cupen
               </Button>
             </div>
+
+            <VinterspelMark variant="hero" className="mt-10" />
           </div>
 
           {/* Scroll-indikator */}

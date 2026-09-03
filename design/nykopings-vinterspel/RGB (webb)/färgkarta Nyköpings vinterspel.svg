@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="AKTUELLT_LAGER" data-name="AKTUELLT LAGER" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 207.96 378.86">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-1, .cls-2 {
+        font-family: MyriadPro-Regular, 'Myriad Pro';
+        font-size: 8px;
+      }
+
+      .cls-2 {
+        fill: #1d1e1c;
+      }
+
+      .cls-3 {
+        letter-spacing: 0em;
+      }
+
+      .cls-4 {
+        letter-spacing: 0em;
+      }
+
+      .cls-5 {
+        fill: #6488c5;
+      }
+
+      .cls-6 {
+        fill: #173e89;
+      }
+
+      .cls-7 {
+        fill: #0e274f;
+      }
+    </style>
+  </defs>
+  <rect class="cls-5" x="54.97" y="28.52" width="98.01" height="98.01"/>
+  <text class="cls-2" transform="translate(89.94 73.01)"><tspan x="0" y="0">#6489c6</tspan><tspan class="cls-3" x="-16.37" y="9.6">R</tspan><tspan x="-12.04" y="9.6">GB: 100, 137, 198</tspan></text>
+  <rect class="cls-6" x="54.97" y="140.42" width="98.01" height="98.01"/>
+  <text class="cls-1" transform="translate(89.85 186.74)"><tspan x="0" y="0">#173e8a</tspan><tspan class="cls-3" x="-12.18" y="9.6">R</tspan><tspan x="-7.85" y="9.6">GB: 23, 62, 138</tspan></text>
+  <rect class="cls-7" x="54.97" y="252.32" width="98.01" height="98.01"/>
+  <text class="cls-1" transform="translate(90.61 298.17)"><tspan x="0" y="0">#0e274f</tspan><tspan class="cls-4" x="-11.74" y="9.6">R</tspan><tspan x="-7.41" y="9.6" xml:space="preserve">GB:  14, 39, 79</tspan></text>
+</svg>

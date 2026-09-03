@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MapPin, Mail } from "lucide-react";
+import VinterspelMark from "@/components/VinterspelMark";
 
 const contacts = [
   {
@@ -71,14 +72,17 @@ export default function Footer() {
                 Facebook
               </a>
             </div>
-            {/* Onyx Innebandy logo */}
-            <div className="mt-8">
-              <p className="text-xs font-semibold text-[#6b7280] mb-3 uppercase tracking-wider">Organisatör</p>
-              <img
-                src="/images/footer-partner.webp"
-                alt="Onyx Innebandy"
-                className="h-10 w-auto"
-              />
+            {/* Organisatör + Nyköpings Vinterspel */}
+            <div className="mt-8 flex flex-wrap gap-x-10 gap-y-6">
+              <div>
+                <p className="text-xs font-semibold text-[#6b7280] mb-3 uppercase tracking-wider">Organisatör</p>
+                <img
+                  src="/images/footer-partner.webp"
+                  alt="Onyx Innebandy"
+                  className="h-10 w-auto"
+                />
+              </div>
+              <VinterspelMark variant="footer" />
             </div>
           </div>
 
