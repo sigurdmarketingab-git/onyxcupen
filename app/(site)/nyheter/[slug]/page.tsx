@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { PortableText } from "@portabletext/react";
-import { getNyhet, getAllNyhetSlugs, urlFor } from "@/lib/sanity";
+import { getNyhet, getAllNyhetSlugs, tidigareAdress, urlFor } from "@/lib/sanity";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -40,6 +40,23 @@ function formatDatum(iso: string) {
 }
 
 const portableTextComponents = {
+  marks: {
+    // Länk-annotationen finns i nyhetsschemat men saknade renderare, så
+    // länkar som lades in i Studio blev oklickbara i brödtexten.
+    link: ({ value, children }: { value?: { href?: string }; children: React.ReactNode }) => {
+      const href = value?.href ?? "";
+      const externLank = href.startsWith("http");
+      return (
+        <a
+          href={href}
+          {...(externLank ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          className="font-medium text-[#F3811F] underline underline-offset-2 decoration-[#F3811F]/40 hover:decoration-[#F3811F]"
+        >
+          {children}
+        </a>
+      );
+    },
+  },
   types: {
     image: ({ value }: any) => {
       const url = urlFor(value).width(800).url();
@@ -56,7 +73,13 @@ export default async function NyhetPage({ params }: { params: Promise<{ slug: st
   const { slug } = await params;
   const nyhet = await getNyhet(slug);
 
-  if (!nyhet) notFound();
+  if (!nyhet) {
+    // Adressen följer rubriken, så en omdöpt nyhet byter adress. Länkar som
+    // delats tidigare skickas vidare i stället för att visa 404.
+    const nuvarande = await tidigareAdress("nyhet", slug);
+    if (nuvarande) redirect(`/nyheter/${nuvarande}`);
+    notFound();
+  }
 
   const imgUrl = nyhet.nyhetsbild ? urlFor(nyhet.nyhetsbild).width(1200).height(675).url() : null;
 

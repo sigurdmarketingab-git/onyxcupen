@@ -23,7 +23,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         cupinfoItems={cupinfoItems ?? []}
       />
       <main className="flex-1">{children}</main>
-      <Footer />
+      <Footer cupinfoItems={cupinfoItems ?? []} />
     </>
   );
 }

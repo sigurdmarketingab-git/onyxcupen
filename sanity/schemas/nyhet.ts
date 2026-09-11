@@ -11,14 +11,14 @@ export default defineType({
       type: "string",
       validation: (r) => r.required(),
     }),
+    // Sidans URL-adress skapas automatiskt från rubriken — se lib/slug.ts.
+    // Fältet ligger kvar dolt och innehåller den adress som gällde tidigare,
+    // så att redan delade länkar kan skickas vidare i stället för att ge 404.
     defineField({
       name: "slug",
       title: "URL-adress",
       type: "slug",
-      description: "Skapas automatiskt från titeln — behöver inte ändras.",
-      options: { source: "titel", maxLength: 96 },
-      validation: (r) => r.required(),
-      hidden: ({ document }) => !!document?.slug,
+      hidden: true,
     }),
     defineField({
       name: "publishedAt",

@@ -21,7 +21,6 @@ const contacts = [
 ];
 
 const quickLinks = [
-  { label: "Cupinfo Röd Nivå", href: "/cupinfo/rod-niva" },
   { label: "Boende", href: "/boende" },
   { label: "Resultat & Spelprogram", href: "/resultat" },
   { label: "För besökare", href: "/for-besokare" },
@@ -29,7 +28,23 @@ const quickLinks = [
   { label: "Kontakt", href: "/kontakt" },
 ];
 
-export default function Footer() {
+type CupinfoItem = { slug: string; namnPaNivan: string };
+
+/**
+ * Cupinfo-länken hämtas från Sanity i stället för att vara hårdkodad —
+ * både namnet och adressen följer rubriken kunden satt. Finns bara en nivå
+ * pekar länken direkt dit; finns flera går den till översikten.
+ */
+function buildQuickLinks(cupinfoItems: CupinfoItem[]) {
+  const cupinfo =
+    cupinfoItems.length === 1
+      ? { label: `Cupinfo ${cupinfoItems[0].namnPaNivan}`, href: `/cupinfo/${cupinfoItems[0].slug}` }
+      : { label: "Cupinfo", href: "/cupinfo" };
+  return [cupinfo, ...quickLinks];
+}
+
+export default function Footer({ cupinfoItems = [] }: { cupinfoItems?: CupinfoItem[] }) {
+  const snabblankar = buildQuickLinks(cupinfoItems);
   return (
     <footer className="bg-black border-t border-white/12 mt-auto pb-20 lg:pb-0">
       <div className="mx-auto max-w-7xl px-5 py-16">
@@ -92,7 +107,7 @@ export default function Footer() {
               Snabblänkar
             </h3>
             <ul className="flex flex-col gap-2.5">
-              {quickLinks.map((link) => (
+              {snabblankar.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}

@@ -1,6 +1,30 @@
 import { defineField, defineType } from "sanity";
 import { orderRankField, orderRankOrdering } from "@sanity/orderable-document-list";
 
+/**
+ * Cupinfo-sidan är gemensam för Röd och Blå nivå — nästan all information är
+ * densamma och ska bara underhållas på ett ställe. Det fåtal rader och avsnitt
+ * som bara gäller en nivå märks upp med det här fältet och får en tydlig
+ * etikett på sidan.
+ */
+const gallerNiva = () =>
+  defineField({
+    name: "gallerNiva",
+    title: "Vilken nivå gäller det här?",
+    type: "string",
+    description:
+      "Låt stå på \"Gäller båda nivåerna\" om informationen är gemensam. Väljer du en nivå visas en tydlig etikett på sidan.",
+    options: {
+      list: [
+        { title: "Gäller båda nivåerna", value: "alla" },
+        { title: "Endast Röd nivå", value: "rod" },
+        { title: "Endast Blå nivå", value: "bla" },
+      ],
+      layout: "radio",
+    },
+    initialValue: "alla",
+  });
+
 export default defineType({
   name: "cupinfo",
   title: "Cup-info per nivå",
@@ -11,23 +35,18 @@ export default defineType({
       name: "namnPaNivan",
       title: "Namn på nivån",
       type: "string",
-      description: 'T.ex. "Röd Nivå" eller "Blå Nivå".',
+      description:
+        'Rubriken högst upp på sidan. Täcker sidan båda nivåerna skriver du t.ex. "Röd & Blå nivå".',
       validation: (r) => r.required(),
     }),
+    // Sidans URL-adress skapas automatiskt från rubriken — se lib/slug.ts.
+    // Fältet ligger kvar dolt och innehåller den adress som gällde tidigare,
+    // så att redan delade länkar kan skickas vidare i stället för att ge 404.
     defineField({
       name: "slug",
       title: "URL-adress",
       type: "slug",
-      description: "Skapas automatiskt — behöver inte ändras.",
-      options: { source: "namnPaNivan", maxLength: 96 },
-      validation: (r) => r.required(),
-      hidden: ({ document }) => !!document?.slug,
-    }),
-    defineField({
-      name: "farg",
-      title: "Färg för den här nivån",
-      type: "color",
-      description: "Visas som en liten färgprick i cupinfo-listan på sidan.",
+      hidden: true,
     }),
 
     // ─── Spelschema ───────────────────────────────────────────────
@@ -61,6 +80,7 @@ export default defineType({
               description: "Visas som en orange varningstext på raden.",
               placeholder: "T.ex. UTGÅR!",
             }),
+            gallerNiva(),
           ],
           preview: { select: { title: "klass", subtitle: "href" } },
         },
@@ -99,6 +119,7 @@ export default defineType({
               placeholder: "T.ex. 2012 eller 2012/2013",
               validation: (r) => r.required(),
             }),
+            gallerNiva(),
           ],
           preview: { select: { title: "klass", subtitle: "argang" } },
         },
@@ -163,6 +184,7 @@ export default defineType({
               rows: 2,
               description: "Visas som liten grå text längst ner på kortet.",
             }),
+            gallerNiva(),
           ],
           preview: {
             select: { title: "titel", subtitle: "pris" },
@@ -208,6 +230,7 @@ export default defineType({
               type: "text",
               rows: 5,
             }),
+            gallerNiva(),
           ],
           preview: { select: { title: "titel" } },
         },
@@ -237,6 +260,7 @@ export default defineType({
               type: "text",
               rows: 6,
             }),
+            gallerNiva(),
           ],
           preview: { select: { title: "titel" } },
         },

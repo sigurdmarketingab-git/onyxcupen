@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import PageHero from "@/components/PageHero";
 import TocAccordion, { type TocItem } from "@/components/TocAccordion";
-import { getCupinfo, getAllCupinfoSlugs } from "@/lib/sanity";
+import LinkedText from "@/components/LinkedText";
+import NivaEtikett from "@/components/NivaEtikett";
+import { getCupinfo, getAllCupinfoSlugs, tidigareAdress } from "@/lib/sanity";
 import { ExternalLink, Check, Calendar, Users, CreditCard, BookOpen, Layers, type LucideIcon } from "lucide-react";
 
 const tocIconMap: Record<string, LucideIcon> = { Calendar, Users, CreditCard, BookOpen, Layers };
@@ -49,19 +51,43 @@ function Section({
   );
 }
 
-function InfoBox({ title, children }: { title: string; children: React.ReactNode }) {
+function InfoBox({
+  title,
+  niva,
+  children,
+}: {
+  title: string;
+  niva?: string | null;
+  children: React.ReactNode;
+}) {
   return (
     <div className="rounded-xl bg-[#232830] border border-white/12 p-5">
-      <h3 className="text-sm font-semibold text-white mb-3">{title}</h3>
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-3">
+        <h3 className="text-sm font-semibold text-white">{title}</h3>
+        <NivaEtikett niva={niva} />
+      </div>
       <div className="text-sm text-[#c4cad4] leading-relaxed">{children}</div>
     </div>
   );
 }
 
-function ResultRow({ klass, href, note }: { klass: string; href?: string | null; note?: string }) {
+function ResultRow({
+  klass,
+  href,
+  note,
+  niva,
+}: {
+  klass: string;
+  href?: string | null;
+  note?: string;
+  niva?: string | null;
+}) {
   return (
-    <div className="flex items-center justify-between py-3.5 px-5 border-b border-white/8 last:border-0">
-      <span className="text-sm text-[#EFEFEF]">{klass}</span>
+    <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 py-3.5 px-5 border-b border-white/8 last:border-0">
+      <span className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm text-[#EFEFEF]">
+        {klass}
+        <NivaEtikett niva={niva} />
+      </span>
       <div className="flex items-center gap-2">
         {note && (
           <span className="text-xs font-medium text-[#F3811F] bg-[#F3811F]/10 px-2.5 py-0.5 rounded-lg">
@@ -90,6 +116,7 @@ function PrisKort({
   highlight,
   items,
   notat,
+  niva,
 }: {
   titel: string;
   pris?: string;
@@ -97,6 +124,7 @@ function PrisKort({
   highlight?: boolean;
   items?: string[];
   notat?: string;
+  niva?: string | null;
 }) {
   return (
     <div
@@ -105,7 +133,10 @@ function PrisKort({
       }`}
     >
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wider text-[#9ca3af] mb-2">{titel}</p>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-2">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#9ca3af]">{titel}</p>
+          <NivaEtikett niva={niva} />
+        </div>
         {pris && <p className="text-3xl font-extrabold text-white">{pris}</p>}
         {enhet && <p className="text-sm text-[#9ca3af]">{enhet}</p>}
       </div>
@@ -114,48 +145,20 @@ function PrisKort({
           {items.map((item, i) => (
             <li key={i} className="flex items-start gap-2.5">
               <Check className="h-4 w-4 text-[#F3811F] shrink-0 mt-0.5" />
-              <span className="text-sm text-[#c4cad4]">{item}</span>
+              <LinkedText text={item} className="text-sm text-[#c4cad4]" />
             </li>
           ))}
         </ul>
       )}
       {notat && (
-        <p className="text-xs text-[#9ca3af] border-t border-white/10 pt-3 leading-relaxed">
-          {notat}
-        </p>
+        <LinkedText
+          text={notat}
+          className="block text-xs text-[#9ca3af] border-t border-white/10 pt-3 leading-relaxed whitespace-pre-line"
+        />
       )}
     </div>
   );
 }
-
-// TEST: Temporär mock-data för att testa hur sidan ser ut med fler nivåer.
-// Ta bort mockData och fallbacken nedan när riktiga nivåer finns i Sanity.
-const mockData: Record<string, any> = {
-  "bla-niva": {
-    namnPaNivan: "Blå Nivå",
-    spelschemaEtikett: "2026 – Preliminärt",
-    spelschema: [
-      { _key: "1", klass: "Pojkar Blå A", href: null },
-      { _key: "2", klass: "Pojkar Blå B", href: null },
-      { _key: "3", klass: "Flickor Blå A", href: null },
-    ],
-    klassindelning: [
-      { _key: "1", klass: "Pojkar Blå A", arg: "2008" },
-      { _key: "2", klass: "Pojkar Blå B", arg: "2009" },
-      { _key: "3", klass: "Flickor Blå A", arg: "2008/2009" },
-    ],
-    klassindelningTextForst: "Blå nivå riktar sig till äldre ungdomslag. Samma regler gäller som för röd nivå.",
-    avgifter: [
-      { _key: "1", titel: "Anmälningsavgift", pris: "3 500 kr", enhet: "per lag", highlight: false, items: ["Minst fyra matcher garanterade"] },
-      { _key: "2", titel: "Deltagarpaket 1", pris: "970 kr", enhet: "per person", highlight: true, items: ["Övernattning 2 nätter", "Alla måltider fre–sön"] },
-    ],
-    spelreglerIngress: "Vi följer SIBF:s regler och tävlingsbestämmelser.",
-    spelregler: [
-      { _key: "1", rubrik: "Matchtider", text: "2 × 20 minuter i alla matcher. Effektiv tid." },
-    ],
-    ovrigInfo: [],
-  },
-};
 
 export default async function CupinfoNiva({
   params,
@@ -163,9 +166,15 @@ export default async function CupinfoNiva({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const sanityData = await getCupinfo(slug);
-  const data = sanityData ?? mockData[slug];
-  if (!data) notFound();
+  const data = await getCupinfo(slug);
+
+  if (!data) {
+    // Adressen följer rubriken, så en omdöpt nivå byter adress. Länkar som
+    // delats tidigare skickas vidare i stället för att visa 404.
+    const nuvarande = await tidigareAdress("cupinfo", slug);
+    if (nuvarande) redirect(`/cupinfo/${nuvarande}`);
+    notFound();
+  }
 
   // Bygg TOC dynamiskt med ikonnamn som strängar (kan serialiseras över server→client-gränsen)
   const tocItems: TocItem[] = [
@@ -194,7 +203,6 @@ export default async function CupinfoNiva({
           { label: "Cupinfo", href: "/cupinfo" },
           { label: data.namnPaNivan },
         ]}
-        accentColor={data.farg?.hex}
       />
 
       <div className="bg-[#181B22] py-12">
@@ -245,7 +253,7 @@ export default async function CupinfoNiva({
                   )}
                   <div className="rounded-xl bg-[#232830] border border-white/12 overflow-hidden">
                     {data.spelschema.map((s: any) => (
-                      <ResultRow key={s._key} klass={s.klass} href={s.href} note={s.notat} />
+                      <ResultRow key={s._key} klass={s.klass} href={s.href} note={s.notat} niva={s.gallerNiva} />
                     ))}
                   </div>
                 </Section>
@@ -254,14 +262,19 @@ export default async function CupinfoNiva({
               {/* Klassindelning */}
               {data.klassindelning?.length > 0 && (
                 <Section id="klassindelning" title="Klassindelning" icon={Users}>
-                  {data.klassindelningTextForst && <p>{data.klassindelningTextForst}</p>}
+                  {data.klassindelningTextForst && (
+                    <p><LinkedText text={data.klassindelningTextForst} /></p>
+                  )}
                   <div className="rounded-xl bg-[#232830] border border-white/12 overflow-hidden my-4">
                     {data.klassindelning.map((k: any) => (
                       <div
                         key={k._key}
-                        className="flex items-center justify-between px-5 py-3.5 border-b border-white/8 last:border-0"
+                        className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-5 py-3.5 border-b border-white/8 last:border-0"
                       >
-                        <span className="text-sm text-[#EFEFEF]">{k.klass}</span>
+                        <span className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm text-[#EFEFEF]">
+                          {k.klass}
+                          <NivaEtikett niva={k.gallerNiva} />
+                        </span>
                         <span className="text-sm font-mono font-semibold text-[#F3811F]">
                           {k.argang}
                         </span>
@@ -269,7 +282,7 @@ export default async function CupinfoNiva({
                     ))}
                   </div>
                   {data.klassindelningTextEfter && (
-                    <p className="whitespace-pre-line">{data.klassindelningTextEfter}</p>
+                    <p className="whitespace-pre-line"><LinkedText text={data.klassindelningTextEfter} /></p>
                   )}
                 </Section>
               )}
@@ -287,12 +300,13 @@ export default async function CupinfoNiva({
                         highlight={kort.highlight}
                         items={kort.items}
                         notat={kort.notat}
+                        niva={kort.gallerNiva}
                       />
                     ))}
                   </div>
                   {data.avgifterNotis && (
                     <div className="rounded-xl bg-[#F3811F]/8 border border-[#F3811F]/25 px-5 py-4 text-sm text-[#c4cad4] leading-relaxed">
-                      {data.avgifterNotis}
+                      <LinkedText text={data.avgifterNotis} className="whitespace-pre-line" />
                     </div>
                   )}
                 </Section>
@@ -301,7 +315,9 @@ export default async function CupinfoNiva({
               {/* Spelregler */}
               {(data.spelregler?.length > 0 || data.spelreglerIngress) && (
                 <Section id="spelregler" title="Spelregler" icon={BookOpen}>
-                  {data.spelreglerIngress && <p>{data.spelreglerIngress}</p>}
+                  {data.spelreglerIngress && (
+                    <p><LinkedText text={data.spelreglerIngress} /></p>
+                  )}
                   {data.spelregler?.length > 0 && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
                       {data.spelregler.map((ruta: any) => (
@@ -309,8 +325,11 @@ export default async function CupinfoNiva({
                           key={ruta._key}
                           className="rounded-xl bg-[#232830] border border-white/12 p-5 space-y-2"
                         >
-                          <h4 className="text-sm font-bold text-white">{ruta.titel}</h4>
-                          <p className="text-sm text-[#c4cad4] whitespace-pre-line">{ruta.innehall}</p>
+                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                            <h4 className="text-sm font-bold text-white">{ruta.titel}</h4>
+                            <NivaEtikett niva={ruta.gallerNiva} />
+                          </div>
+                          <p className="text-sm text-[#c4cad4] whitespace-pre-line"><LinkedText text={ruta.innehall} /></p>
                         </div>
                       ))}
                     </div>
@@ -323,8 +342,8 @@ export default async function CupinfoNiva({
                 <Section id="ovriginformation" title="Övrig information" icon={Layers}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {data.ovrigInfo.map((ruta: any) => (
-                      <InfoBox key={ruta._key} title={ruta.titel}>
-                        <p className="whitespace-pre-line">{ruta.innehall}</p>
+                      <InfoBox key={ruta._key} title={ruta.titel} niva={ruta.gallerNiva}>
+                        <p className="whitespace-pre-line"><LinkedText text={ruta.innehall} /></p>
                       </InfoBox>
                     ))}
                   </div>

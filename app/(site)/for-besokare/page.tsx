@@ -9,6 +9,7 @@ export const metadata: Metadata = {
     "Tips på aktiviteter och sevärdheter i Nyköping under Onyxcupen-helgen. Perfekt för familjer och supportrar.",
 };
 import { getAllForBesokare, urlFor } from "@/lib/sanity";
+import LinkedText from "@/components/LinkedText";
 
 const kategoriLabels: Record<string, string> = {
   aktiviteter: "Aktiviteter",
@@ -71,7 +72,7 @@ export default async function ForBesokare() {
                             <h3 className="text-xl font-bold text-white">{plats.namn}</h3>
                             <div className="text-sm text-[#c4cad4] leading-relaxed space-y-3">
                               {plats.beskrivning?.split("\n\n").map((para: string, i: number) => (
-                                <p key={i}>{para}</p>
+                                <p key={i}><LinkedText text={para} /></p>
                               ))}
                             </div>
                             {plats.hemsidaUrl && (

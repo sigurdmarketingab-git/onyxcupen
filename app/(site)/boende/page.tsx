@@ -8,6 +8,7 @@ export const metadata: Metadata = {
     "Boendealternativ nära Rosvalla Arena i Nyköping under Onyxcupen 2026. Hitta hotell och stugbyar för hela laget.",
 };
 import { getAllBoende, urlFor } from "@/lib/sanity";
+import LinkedText from "@/components/LinkedText";
 
 export default async function BoendePage() {
   const boendeAlternativ = await getAllBoende();
@@ -64,8 +65,8 @@ export default async function BoendePage() {
                     )}
 
                     {alt.beskrivning && (
-                      <p className="text-sm text-[#c4cad4] leading-relaxed flex-1">
-                        {alt.beskrivning}
+                      <p className="text-sm text-[#c4cad4] leading-relaxed flex-1 whitespace-pre-line">
+                        <LinkedText text={alt.beskrivning} />
                       </p>
                     )}
 

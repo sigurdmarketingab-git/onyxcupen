@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { MapPin, Calendar, Info, ChevronRight, Clock, CreditCard, ChevronDown, Check, BedDouble, BarChart2, Compass } from "lucide-react";
 import Button from "@/components/Button";
+import LinkedText from "@/components/LinkedText";
 import VinterspelMark, { VINTERSPEL_LOGO } from "@/components/VinterspelMark";
 import { getInstallningar, getLatestNyheter, getAllCupinfo, urlFor } from "@/lib/sanity";
 import { isAnmalningOppen, formatSwedishDate } from "@/lib/registration";
@@ -373,7 +374,7 @@ export default async function HomePage() {
                   </h2>
                 )}
                 <p className="text-[#9ca3af] leading-relaxed whitespace-pre-line">
-                  {inst.vinterspelText}
+                  <LinkedText text={inst.vinterspelText} />
                 </p>
               </div>
             </div>
